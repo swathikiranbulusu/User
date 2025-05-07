@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const generateToken = (id) => jwt.sign({ id }, 'jwtSecret', { expiresIn: '1d' });
 
 exports.register = async (req, res) => {
+  console.log('🔔 Register route hit');
   const { name, email, password } = req.body;
   const user = new User({ name, email, password });
   await user.save();
