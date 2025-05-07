@@ -19,10 +19,9 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function (next) {
-  // Skip if password is not being modified
   if (!this.isModified('password') || !this.password) return next();
 
-  console.log('📛 Password before hashing:', this.password); // Debug log
+  console.log('📛 Full document before hashing:', this);
 
   try {
     const salt = await bcrypt.genSalt(10);
@@ -32,5 +31,4 @@ userSchema.pre('save', async function (next) {
     next(err);
   }
 });
-
 module.exports = mongoose.model('User', userSchema);
