@@ -3,7 +3,9 @@ const router = express.Router();
 const { register, login, profile } = require('../controllers/userController');
 const auth = require('../middleware/auth');
 const { getAllUsers } = require('../controllers/userController');
+const { getUserById } = require('../controllers/userController');
 
+router.get('/:id', getUserById); // GET /api/users/:id
 router.get('/', getAllUsers); // GET /api/users
 router.post('/register', register); // ✅ this defines /api/users/register
 router.post('/login', login);
