@@ -3,8 +3,12 @@ const router = express.Router();
 const { register, login, profile, getAllUsers, getUserById } = require('../controllers/userController');
 const auth = require('../middleware/auth');
 
-// ✅ Order matters: define '/' before '/:id'
-router.get('/', getAllUsers);            // GET /api/users
+
+router.get('/', (req, res) => {
+  console.log('📡 /api/users route hit directly');
+  res.send('User list route working ✅');
+});
+          // GET /api/users
 router.get('/:id', getUserById);         // GET /api/users/:id
 
 router.post('/register', register);      // POST /api/users/register
