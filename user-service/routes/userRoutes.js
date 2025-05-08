@@ -5,8 +5,8 @@ const auth = require('../middleware/auth');
 const { getAllUsers } = require('../controllers/userController');
 const { getUserById } = require('../controllers/userController');
 
-router.get('/:id', getUserById); // GET /api/users/:id
 router.get('/', getAllUsers); // GET /api/users
+router.get('/:id', getUserById); // GET /api/users/:id
 router.post('/register', register); // ✅ this defines /api/users/register
 router.post('/login', login);
 router.get('/profile', auth, profile);
