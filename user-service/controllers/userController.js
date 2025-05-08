@@ -1,3 +1,9 @@
+const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
+const generateToken = (id) => jwt.sign({ id }, 'jwtSecret', { expiresIn: '1d' });
+
 exports.register = async (req, res) => {
   console.log('🔔 Register route hit');
   console.log('📥 Request body:', req.body);
@@ -19,16 +25,33 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-const User = require('../models/User');
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return res.status(401).json({ message: 'Invalid credentials' });
+  }
+
+  res.json({ token: generateToken(user._id) });
+};
+
+exports.profile = async (req, res) => {
+  const user = await User.findById(req.user.id).select('-password');
+  res.json(user);
+};
 
 exports.getAllUsers = async (req, res) => {
+  console.log('📡 /api/users hit');
   try {
-    const users = await User.find().select('-password'); // hide passwords
+    const users = await User.find().select('-password');
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
